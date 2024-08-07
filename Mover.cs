@@ -5,23 +5,23 @@ using UnityEngine;
 public class Mover : MonoBehaviour
 {
     private Rigidbody2D _rigidbody;
-    private float _speed;
+    private float _speedOfChangeOfSpeed;
+    private float _speed = 0;
 
     private void Start()
     {
         _speed = 10;
+        _speedOfChangeOfSpeed = 100;
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    public void Walk(float speed)
+    public void Walk(float move)
     {
-        _rigidbody.velocity = Vector2.MoveTowards(_rigidbody.velocity, GetTarget(speed), _speed);
+        _rigidbody.velocity = Vector2.MoveTowards(_rigidbody.velocity, GetTargetSpeed(move), _speedOfChangeOfSpeed * Time.fixedDeltaTime);
     }
 
-    private Vector2 GetTarget(float move)
+    private Vector2 GetTargetSpeed(float move)
     {
-        Vector2 target = new(move * _speed, _rigidbody.velocity.y);
-
-        return target;
+        return new Vector2(move * _speed, _rigidbody.velocity.y);
     }
 }
