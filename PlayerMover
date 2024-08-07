@@ -1,41 +1,39 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Direction), typeof(Mover), typeof(Rigidbody2D))]
+[RequireComponent(typeof(Flipper), typeof(Mover), typeof(Rigidbody2D))]
 [RequireComponent(typeof(GroundDetector))]
 
-public class PlayerController : MonoBehaviour
+public class PlayerMover : MonoBehaviour
 {
     [SerializeField] private float _jumpForce = 400f;
 
     private Mover _mover;
     private Rigidbody2D _rigidbody;
-    private Direction _reversalView;
-    private GroundDetector _checkGrounded;
+    private Flipper _flipper;
+    private GroundDetector _groundDetector;
     private bool _grounded;
 
     private void Awake()
     {
         _mover = GetComponent<Mover>();
         _rigidbody = GetComponent<Rigidbody2D>();
-        _reversalView = GetComponent<Direction>();
-        _checkGrounded = GetComponent<GroundDetector>();
+        _flipper = GetComponent<Flipper>();
+        _groundDetector = GetComponent<GroundDetector>();
     }
 
     private void Update()
     {
-        _grounded = _checkGrounded.CheckLocationOnGround();
+        _grounded = _groundDetector.LocatedOnGround();
     }
 
-    public void Move(float move, bool jump)
+    public void Move(float move)
     {
         _mover.Walk(move);
 
-        _reversalView.FlipCharacter(move);
-
-        JumpHandler(jump);
+        _flipper.FlipCharacter(move);
     }
 
-    private void JumpHandler(bool jump)
+    public void Jump(bool jump)
     {
         if (_grounded && jump)
         {
