@@ -8,13 +8,18 @@ public class Spawner : MonoBehaviour
     [SerializeField] private float _respawnDuration;
 
     private Coin _coin;
+    private WaitForSeconds _wait;
+
+    private void Start()
+    {
+        _wait = new WaitForSeconds(_respawnDuration);
+    }
 
     private void OnEnable()
     {
         _coin = Instantiate(_coinsPrefab, _coinsPrefab.transform.position, quaternion.identity);
         _coin.Collected += Respawn;
     }
-
 
     private void OnDisable()
     {
@@ -28,7 +33,7 @@ public class Spawner : MonoBehaviour
 
     private IEnumerator SpawnCoinWithDelay()
     {
-        yield return new WaitForSeconds(_respawnDuration);
+        yield return _wait;
 
         _coin.gameObject.SetActive(true);
     }
